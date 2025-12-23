@@ -1,0 +1,81 @@
+import { useAuth } from '../contexts/AuthContext';
+
+export const Home = () => {
+	const { user, login, logout, isAuthenticated } = useAuth();
+
+	if (!isAuthenticated) {
+		return (
+			<div style={{ textAlign: 'center', marginTop: '100px' }}>
+				<h1>Welcome to 42 Student Finder</h1>
+				<p>Login with your 42 account to get started</p>
+				<button
+					onClick={login}
+					style={{
+						padding: '12px 24px',
+						fontSize: '16px',
+						backgroundColor: '#00babc',
+						color: 'white',
+						border: 'none',
+						borderRadius: '4px',
+						cursor: 'pointer',
+						marginTop: '20px',
+					}}>
+					Login with 42
+				</button>
+			</div>
+		);
+	}
+
+	return (
+		<div style={{ padding: '20px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					marginBottom: '30px',
+				}}>
+				<h1>Hello, {user?.displayname}!</h1>
+				<button
+					onClick={logout}
+					style={{
+						padding: '8px 16px',
+						backgroundColor: '#dc3545',
+						color: 'white',
+						border: 'none',
+						borderRadius: '4px',
+						cursor: 'pointer',
+					}}>
+					Logout
+				</button>
+			</div>
+
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: '20px',
+					padding: '20px',
+					backgroundColor: '#f5f5f5',
+					borderRadius: '8px',
+				}}>
+				<img
+					src={user?.image.versions.medium}
+					alt={user?.login}
+					style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+				/>
+				<div>
+					<h2>{user?.usual_full_name}</h2>
+					<p>Login: {user?.login}</p>
+					<p>Email: {user?.email}</p>
+					<p>
+						Pool: {user?.pool_month} {user?.pool_year}
+					</p>
+					<p>Correction Points: {user?.correction_point}</p>
+					<p>Wallet: {user?.wallet}€</p>
+					{user?.location && <p>📍 Location: {user.location}</p>}
+				</div>
+			</div>
+		</div>
+	);
+};
