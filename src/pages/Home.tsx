@@ -1,7 +1,16 @@
 import { useAuth } from '../contexts/AuthContext';
 
 export const Home = () => {
-	const { user, login, logout, isAuthenticated } = useAuth();
+	const { user, login, logout, isAuthenticated, loading } = useAuth();
+
+	// Show loading spinner while checking authentication
+	if (loading) {
+		return (
+			<div style={{ textAlign: 'center', marginTop: '100px' }}>
+				<h2>Loading...</h2>
+			</div>
+		);
+	}
 
 	if (!isAuthenticated) {
 		return (

@@ -13,7 +13,8 @@ export const Callback = () => {
 			if (code) {
 				try {
 					await authService.getAccessToken(code);
-					navigate('/');
+					// Force a full page reload to refresh the AuthContext
+					window.location.href = '/';
 				} catch (error) {
 					console.error('Authentication failed:', error);
 					navigate('/');
