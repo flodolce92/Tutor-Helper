@@ -1,9 +1,9 @@
 import { useAuth } from '../contexts/AuthContext';
+import { UserSearch } from '../components/UserSearch';
 
 export const Home = () => {
 	const { user, login, logout, isAuthenticated, loading } = useAuth();
 
-	// Show loading spinner while checking authentication
 	if (loading) {
 		return (
 			<div style={{ textAlign: 'center', marginTop: '100px' }}>
@@ -36,7 +36,7 @@ export const Home = () => {
 	}
 
 	return (
-		<div style={{ padding: '20px' }}>
+		<div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
 			<div
 				style={{
 					display: 'flex',
@@ -67,6 +67,7 @@ export const Home = () => {
 					padding: '20px',
 					backgroundColor: '#f5f5f5',
 					borderRadius: '8px',
+					marginBottom: '30px',
 				}}>
 				<img
 					src={user?.image.versions.medium}
@@ -74,17 +75,21 @@ export const Home = () => {
 					style={{ width: '100px', height: '100px', borderRadius: '50%' }}
 				/>
 				<div>
-					<h2>{user?.usual_full_name}</h2>
-					<p>Login: {user?.login}</p>
-					<p>Email: {user?.email}</p>
-					<p>
+					<h2 style={{ margin: '0 0 10px 0' }}>{user?.usual_full_name}</h2>
+					<p style={{ margin: '3px 0' }}>Login: {user?.login}</p>
+					<p style={{ margin: '3px 0' }}>
 						Pool: {user?.pool_month} {user?.pool_year}
 					</p>
-					<p>Correction Points: {user?.correction_point}</p>
-					<p>Wallet: {user?.wallet}€</p>
-					{user?.location && <p>📍 Location: {user.location}</p>}
+					<p style={{ margin: '3px 0' }}>
+						Correction Points: {user?.correction_point}
+					</p>
+					{user?.location && (
+						<p style={{ margin: '3px 0' }}>📍 Location: {user.location}</p>
+					)}
 				</div>
 			</div>
+
+			<UserSearch />
 		</div>
 	);
 };
