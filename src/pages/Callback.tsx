@@ -27,8 +27,8 @@ export const Callback = () => {
 
 	return (
 		<div style={{ textAlign: 'center', marginTop: '50px' }}>
-			<h2>Authenticating...</h2>
-			<p>Please wait while we log you in.</p>
+			<h2 style={{ color: '#ffffff' }}>Authenticating...</h2>
+			<p style={{ color: '#cccccc' }}>Please wait while we log you in.</p>
 		</div>
 	);
 };

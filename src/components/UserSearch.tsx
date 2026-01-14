@@ -40,7 +40,9 @@ export const UserSearch = () => {
 						width: '100%',
 						maxWidth: '400px',
 						borderRadius: '4px',
-						border: '1px solid #ccc',
+						border: '1px solid #333333',
+						backgroundColor: '#2a2a2a',
+						color: '#ffffff',
 					}}
 				/>
 				<button
@@ -75,9 +77,9 @@ export const UserSearch = () => {
 							alignItems: 'center',
 							gap: '15px',
 							padding: '15px',
-							backgroundColor: '#f9f9f9',
+							backgroundColor: '#1e1e1e',
 							borderRadius: '8px',
-							border: '1px solid #e0e0e0',
+							border: '1px solid #333333',
 						}}>
 						<img
 							src={user.image.versions.small}
@@ -85,9 +87,12 @@ export const UserSearch = () => {
 							style={{ width: '60px', height: '60px', borderRadius: '50%' }}
 						/>
 						<div style={{ flex: 1 }}>
-							<h3 style={{ margin: '0 0 5px 0' }}>{user.usual_full_name}</h3>
-							<p style={{ margin: '3px 0', color: '#666' }}>@{user.login}</p>
-							<p style={{ margin: '3px 0', fontSize: '14px', color: '#888' }}>
+							<h3 style={{ margin: '0 0 5px 0', color: '#ffffff' }}>
+								{user.usual_full_name}
+							</h3>
+							<p style={{ margin: '3px 0', color: '#cccccc' }}>@{user.login}</p>
+							<p
+								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
 								Pool: {user.pool_month} {user.pool_year}
 							</p>
 							{user.location && (
@@ -102,10 +107,12 @@ export const UserSearch = () => {
 							)}
 						</div>
 						<div style={{ textAlign: 'right' }}>
-							<p style={{ margin: '3px 0', fontSize: '14px' }}>
+							<p
+								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
 								⭐ {user.correction_point} pts
 							</p>
-							<p style={{ margin: '3px 0', fontSize: '14px' }}>
+							<p
+								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
 								💰 {user.wallet}€
 							</p>
 						</div>

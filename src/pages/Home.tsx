@@ -65,7 +65,7 @@ export const Home = () => {
 					alignItems: 'center',
 					gap: '20px',
 					padding: '20px',
-					backgroundColor: '#f5f5f5',
+					backgroundColor: '#1e1e1e',
 					borderRadius: '8px',
 					marginBottom: '30px',
 				}}>
@@ -75,16 +75,22 @@ export const Home = () => {
 					style={{ width: '100px', height: '100px', borderRadius: '50%' }}
 				/>
 				<div>
-					<h2 style={{ margin: '0 0 10px 0' }}>{user?.usual_full_name}</h2>
-					<p style={{ margin: '3px 0' }}>Login: {user?.login}</p>
-					<p style={{ margin: '3px 0' }}>
+					<h2 style={{ margin: '0 0 10px 0', color: '#ffffff' }}>
+						{user?.usual_full_name}
+					</h2>
+					<p style={{ margin: '3px 0', color: '#cccccc' }}>
+						Login: {user?.login}
+					</p>
+					<p style={{ margin: '3px 0', color: '#cccccc' }}>
 						Pool: {user?.pool_month} {user?.pool_year}
 					</p>
-					<p style={{ margin: '3px 0' }}>
+					<p style={{ margin: '3px 0', color: '#cccccc' }}>
 						Correction Points: {user?.correction_point}
 					</p>
 					{user?.location && (
-						<p style={{ margin: '3px 0' }}>📍 Location: {user.location}</p>
+						<p style={{ margin: '3px 0', color: '#cccccc' }}>
+							📍 Location: {user.location}
+						</p>
 					)}
 				</div>
 			</div>
