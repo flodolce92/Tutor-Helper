@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { apiService } from '../services/api.service';
 import type { UserSearch as UserSearchType } from '../types/user';
+import { UserCard } from './UserCard';
+import { UserModal } from './UserModal';
 
 export const UserSearch = () => {
 	const [query, setQuery] = useState('');
 	const [results, setResults] = useState<UserSearchType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [searched, setSearched] = useState(false);
+	const [selectedUser, setSelectedUser] = useState<UserSearchType | null>(null);
 
 	const handleSearch = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -27,7 +30,6 @@ export const UserSearch = () => {
 
 	return (
 		<div style={{ marginTop: '30px' }}>
-			<h2>Search Students</h2>
 			<form onSubmit={handleSearch} style={{ marginBottom: '20px' }}>
 				<input
 					type="text"
@@ -70,55 +72,14 @@ export const UserSearch = () => {
 
 			<div style={{ display: 'grid', gap: '15px' }}>
 				{results.map((user) => (
-					<div
+					<UserCard
 						key={user.id}
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							gap: '15px',
-							padding: '15px',
-							backgroundColor: '#1e1e1e',
-							borderRadius: '8px',
-							border: '1px solid #333333',
-						}}>
-						<img
-							src={user.image.versions.small}
-							alt={user.login}
-							style={{ width: '60px', height: '60px', borderRadius: '50%' }}
-						/>
-						<div style={{ flex: 1 }}>
-							<h3 style={{ margin: '0 0 5px 0', color: '#ffffff' }}>
-								{user.usual_full_name}
-							</h3>
-							<p style={{ margin: '3px 0', color: '#cccccc' }}>@{user.login}</p>
-							<p
-								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
-								Pool: {user.pool_month} {user.pool_year}
-							</p>
-							{user.location && (
-								<p
-									style={{
-										margin: '3px 0',
-										fontSize: '14px',
-										color: '#00babc',
-									}}>
-									📍 {user.location}
-								</p>
-							)}
-						</div>
-						<div style={{ textAlign: 'right' }}>
-							<p
-								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
-								⭐ {user.correction_point} pts
-							</p>
-							<p
-								style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
-								💰 {user.wallet}€
-							</p>
-						</div>
-					</div>
+						user={user}
+						onClick={() => setSelectedUser(user)}
+					/>
 				))}
 			</div>
+			<UserModal user={selectedUser} onClose={() => setSelectedUser(null)} />
 		</div>
 	);
 };

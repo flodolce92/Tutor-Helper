@@ -34,9 +34,9 @@ class ApiService {
 		poolMonth: string,
 		poolYear: string,
 		page: number = 1,
-		perPage: number = 30
+		perPage: number = 100
 	): Promise<UserSearch[]> {
-		const response = await axios.get<UserSearch[]>(`${API_BASE}/users`, {
+		const response = await axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
 			headers: this.getHeaders(),
 			params: {
 				'filter[pool_month]': poolMonth,
@@ -59,6 +59,7 @@ class ApiService {
 				headers: this.getHeaders(),
 				params: {
 					'filter[active]': true,
+					'filter[campus_id]': campusId,
 					page,
 					per_page: 100,
 				},

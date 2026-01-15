@@ -1,5 +1,4 @@
 import { useAuth } from '../contexts/AuthContext';
-import { UserSearch } from '../components/UserSearch';
 
 export const Home = () => {
 	const { user, login, logout, isAuthenticated, loading } = useAuth();
@@ -44,7 +43,6 @@ export const Home = () => {
 					alignItems: 'center',
 					marginBottom: '30px',
 				}}>
-				<h1>Hello, {user?.displayname}!</h1>
 				<button
 					onClick={logout}
 					style={{
@@ -94,8 +92,6 @@ export const Home = () => {
 					)}
 				</div>
 			</div>
-
-			<UserSearch />
 		</div>
 	);
 };
