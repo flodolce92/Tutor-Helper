@@ -3,7 +3,6 @@ import type { TokenResponse, User42 } from '../types/auth';
 
 const API_BASE = 'https://api.intra.42.fr';
 const CLIENT_ID = import.meta.env.VITE_42_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.VITE_42_CLIENT_SECRET;
 const REDIRECT_URI = import.meta.env.VITE_42_REDIRECT_URI;
 
 class AuthService {
@@ -24,16 +23,9 @@ class AuthService {
 
 	// Exchange authorization code for access token
 	async getAccessToken(code: string): Promise<TokenResponse> {
-		const response = await axios.post<TokenResponse>(
-			`${API_BASE}/oauth/token`,
-			{
-				grant_type: 'authorization_code',
-				client_id: CLIENT_ID,
-				client_secret: CLIENT_SECRET,
-				code,
-				redirect_uri: REDIRECT_URI,
-			}
-		);
+		const response = await axios.post<TokenResponse>('/api/auth/token', {
+			code,
+		});
 
 		this.saveToken(response.data);
 		return response.data;
