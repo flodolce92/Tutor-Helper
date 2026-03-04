@@ -10,32 +10,51 @@ function App() {
 	return (
 		<AuthProvider>
 			<BrowserRouter>
+				<style>
+					{`
+						.nav-link {
+							color: #cccccc;
+							text-decoration: none;
+							padding: 10px 20px;
+							border-radius: 8px;
+							transition: all 0.2s;
+							font-weight: 500;
+							font-size: 15px;
+						}
+						.nav-link:hover {
+							color: #00babc;
+							background-color: rgba(0, 186, 188, 0.1);
+							transform: translateY(-2px);
+						}
+						.nav-link.active {
+							color: #00babc;
+							background-color: rgba(0, 186, 188, 0.15);
+						}
+					`}
+				</style>
 				<nav
 					style={{
-						padding: '10px',
+						padding: '16px 20px',
 						backgroundColor: '#1e1e1e',
-						borderBottom: '1px solid #333333',
+						borderBottom: '2px solid #333333',
 						display: 'flex',
-						gap: '20px',
+						gap: '8px',
 						justifyContent: 'center',
+						alignItems: 'center',
+						flexWrap: 'wrap',
+						boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
 					}}>
-					<Link to="/" style={{ color: '#00babc', textDecoration: 'none' }}>
-						Home
+					<Link to="/" className="nav-link">
+						🏠 Home
 					</Link>
-					<Link
-						to="/search"
-						style={{ color: '#00babc', textDecoration: 'none' }}>
-						Search
+					<Link to="/search" className="nav-link">
+						🔍 Search
 					</Link>
-					<Link
-						to="/filter"
-						style={{ color: '#00babc', textDecoration: 'none' }}>
-						Filter by Piscine
+					<Link to="/filter" className="nav-link">
+						🏊 Filter by Piscine
 					</Link>
-					<Link
-						to="/online"
-						style={{ color: '#00babc', textDecoration: 'none' }}>
-						Online Students
+					<Link to="/online" className="nav-link">
+						🟢 Online Students
 					</Link>
 				</nav>
 				<Routes>
