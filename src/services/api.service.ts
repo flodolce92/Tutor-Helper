@@ -2,7 +2,7 @@ import axios from 'axios';
 import { authService } from './auth.service';
 import type { UserSearch, LocationUser } from '../types/user';
 
-const API_BASE = 'https://api.intra.42.fr/v2';
+const API_BASE = '/api/v2';
 
 class ApiService {
 	private getHeaders() {

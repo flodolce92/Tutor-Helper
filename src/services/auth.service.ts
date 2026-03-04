@@ -64,10 +64,10 @@ class AuthService {
 		localStorage.removeItem(this.tokenExpiryKey);
 	}
 
-	// Get current user info
+	// Get current user info via serverless proxy
 	async getCurrentUser(): Promise<User42> {
 		const token = this.getStoredToken();
-		const response = await axios.get<User42>(`${API_BASE}/v2/me`, {
+		const response = await axios.get<User42>('/api/v2/me', {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

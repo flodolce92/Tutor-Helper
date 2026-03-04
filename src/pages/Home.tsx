@@ -34,6 +34,8 @@ export const Home = () => {
 		);
 	}
 
+	console.log('Authenticated user:', user);
+
 	return (
 		<div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
 			<div
@@ -67,11 +69,13 @@ export const Home = () => {
 					borderRadius: '8px',
 					marginBottom: '30px',
 				}}>
-				<img
-					src={user?.image.versions.medium}
-					alt={user?.login}
-					style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-				/>
+				{user?.image?.versions?.medium && (
+					<img
+						src={user.image.versions.medium}
+						alt={user?.login}
+						style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+					/>
+				)}
 				<div>
 					<h2 style={{ margin: '0 0 10px 0', color: '#ffffff' }}>
 						{user?.usual_full_name}
