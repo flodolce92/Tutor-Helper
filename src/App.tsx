@@ -19,6 +19,9 @@ function App() {
 						gap: '20px',
 						justifyContent: 'center',
 					}}>
+					<Link to="/" style={{ color: '#00babc', textDecoration: 'none' }}>
+						Home
+					</Link>
 					<Link
 						to="/search"
 						style={{ color: '#00babc', textDecoration: 'none' }}>

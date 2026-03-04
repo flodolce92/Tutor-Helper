@@ -10,24 +10,80 @@ export const OnlineUserCard = ({ location, onClick }: OnlineUserCardProps) => {
 		<div
 			style={{
 				display: 'flex',
+				flexDirection: 'column',
 				alignItems: 'center',
-				gap: '15px',
-				padding: '15px',
+				gap: '12px',
+				padding: '20px',
 				backgroundColor: '#1e1e1e',
-				borderRadius: '8px',
+				borderRadius: '12px',
 				border: '1px solid #333333',
 				cursor: onClick ? 'pointer' : 'default',
+				transition: 'transform 0.2s, box-shadow 0.2s',
+			}}
+			onMouseEnter={(e) => {
+				e.currentTarget.style.transform = 'translateY(-4px)';
+				e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+			}}
+			onMouseLeave={(e) => {
+				e.currentTarget.style.transform = 'translateY(0)';
+				e.currentTarget.style.boxShadow = 'none';
 			}}
 			onClick={onClick}>
-			<div style={{ flex: 1 }}>
-				<h3 style={{ margin: '0 0 5px 0', color: '#ffffff' }}>
-					@{location.user.login}
-				</h3>
-				<p style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
-					🖥️ {location.host}
+			{location.user.image && (
+				<img
+					src={location.user.image.versions.medium}
+					alt={location.user.login}
+					style={{
+						width: '160px',
+						height: '160px',
+						borderRadius: '50%',
+						objectFit: 'cover',
+						border: '4px solid #333333',
+					}}
+				/>
+			)}
+			<h3
+				style={{
+					margin: '0',
+					color: '#ffffff',
+					fontSize: '18px',
+					textAlign: 'center',
+					width: '100%',
+				}}>
+				@{location.user.login}
+			</h3>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					width: '100%',
+					marginTop: 'auto',
+					gap: '8px',
+				}}>
+				<p
+					style={{
+						margin: '0',
+						fontSize: '13px',
+						color: '#cccccc',
+						display: 'flex',
+						alignItems: 'center',
+						gap: '4px',
+					}}>
+					<span>🖥️</span>
+					<span>{location.host}</span>
 				</p>
-				<p style={{ margin: '3px 0', fontSize: '14px', color: '#cccccc' }}>
-					🕒 Logged in: {new Date(location.begin_at).toLocaleString()}
+				<p
+					style={{
+						margin: '0',
+						fontSize: '11px',
+						color: '#999999',
+						display: 'flex',
+						alignItems: 'center',
+						gap: '4px',
+					}}>
+					<span>🕒</span>
+					<span>{new Date(location.begin_at).toLocaleTimeString()}</span>
 				</p>
 			</div>
 		</div>

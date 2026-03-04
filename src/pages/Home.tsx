@@ -34,8 +34,6 @@ export const Home = () => {
 		);
 	}
 
-	console.log('Authenticated user:', user);
-
 	return (
 		<div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
 			<div

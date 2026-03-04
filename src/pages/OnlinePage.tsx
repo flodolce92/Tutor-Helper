@@ -39,12 +39,26 @@ export const OnlinePage = () => {
 
 	return (
 		<div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+			<style>
+				{`
+					.online-grid {
+						display: grid;
+						grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+						gap: 20px;
+					}
+					@media (max-width: 768px) {
+						.online-grid {
+							grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+						}
+					}
+				`}
+			</style>
 			<p style={{ marginBottom: '15px', color: '#cccccc' }}>
 				Found {locations.length} student{locations.length !== 1 ? 's' : ''}{' '}
 				online
 			</p>
 
-			<div style={{ display: 'grid', gap: '15px' }}>
+			<div className="online-grid">
 				{locations.map((loc) => (
 					<OnlineUserCard
 						key={loc.id}

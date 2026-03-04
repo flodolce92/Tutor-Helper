@@ -82,5 +82,14 @@ export interface LocationUser {
 		id: number;
 		login: string;
 		url: string;
+		image: {
+			link: string;
+			versions: {
+				large: string;
+				medium: string;
+				small: string;
+				micro: string;
+			};
+		};
 	};
 }
