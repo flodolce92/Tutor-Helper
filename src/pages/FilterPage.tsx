@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { apiService } from '../services/api.service';
 import type { UserSearch as UserSearchType } from '../types/user';
 import { UserCard } from '../components/UserCard';
 import { UserModal } from '../components/UserModal';
+
+const getCookie = (name: string): string => {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop()?.split(';').shift() || '';
+	return '';
+};
+
+const setCookie = (name: string, value: string, days: number = 365) => {
+	const expires = new Date();
+	expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+	document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+};
 
 export const FilterPage = () => {
 	const [month, setMonth] = useState('');
@@ -11,6 +24,13 @@ export const FilterPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [searched, setSearched] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<UserSearchType | null>(null);
+
+	useEffect(() => {
+		const savedMonth = getCookie('filterMonth');
+		const savedYear = getCookie('filterYear');
+		if (savedMonth) setMonth(savedMonth);
+		if (savedYear) setYear(savedYear);
+	}, []);
 
 	const months = [
 		'january',
@@ -30,6 +50,9 @@ export const FilterPage = () => {
 	const handleFilter = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!month || !year) return;
+
+		setCookie('filterMonth', month);
+		setCookie('filterYear', year);
 
 		setLoading(true);
 		setSearched(true);
