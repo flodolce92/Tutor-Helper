@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { UserSearch } from '../types/user';
 
 interface UserModalProps {
@@ -6,6 +7,21 @@ interface UserModalProps {
 }
 
 export const UserModal = ({ user, onClose }: UserModalProps) => {
+	// Close modal on back button press
+	useEffect(() => {
+		if (!user) return;
+
+		window.history.pushState({ modal: true }, '');
+		const handlePopState = () => {
+			onClose();
+		};
+		window.addEventListener('popstate', handlePopState);
+
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
+	}, [user, onClose]);
+
 	if (!user) return null;
 
 	return (
