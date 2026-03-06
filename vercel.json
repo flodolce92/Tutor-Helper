@@ -10,6 +10,10 @@
     {
       "source": "/api/v2/(.*)",
       "destination": "/api/v2/[...path]"
+    },
+    {
+      "source": "/((?!api/|@|src/|node_modules/|favicon/|.*\\.).*)",
+      "destination": "/index.html"
     }
   ]
 }
