@@ -17,6 +17,7 @@ export const OnlinePage = () => {
 		const fetchLocations = async () => {
 			try {
 				const locs = await apiService.getLocations(30);
+				locs.sort((a, b) => a.host.localeCompare(b.host, undefined, { numeric: true }));
 				setLocations(locs);
 			} catch (error) {
 				console.error('Failed to fetch locations:', error);

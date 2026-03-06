@@ -18,10 +18,14 @@ class ApiService {
 		page: number = 1,
 		perPage: number = 20
 	): Promise<UserSearch[]> {
+		query = query.trim();
+		query = query.toLowerCase();
+		const queryRangeEnd = query.slice(0, -1) + String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
 		const response = await axios.get<UserSearch[]>(`${API_BASE}/users`, {
 			headers: this.getHeaders(),
 			params: {
-				'filter[login]': query,
+				'range[login]': `[${query},${queryRangeEnd}]`,
+				sort: 'login',
 				page,
 				per_page: perPage,
 			},
@@ -41,6 +45,7 @@ class ApiService {
 			params: {
 				'filter[pool_month]': poolMonth,
 				'filter[pool_year]': poolYear,
+				sort: 'login',
 				page,
 				per_page: perPage,
 			},
@@ -60,6 +65,7 @@ class ApiService {
 				params: {
 					'filter[active]': true,
 					'filter[campus_id]': campusId,
+					'range[host]': '[e3,e4]',
 					page,
 					per_page: 100,
 				},
