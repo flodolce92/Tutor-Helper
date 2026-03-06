@@ -24,7 +24,7 @@ class ApiService {
 		const response = await axios.get<UserSearch[]>(`${API_BASE}/users`, {
 			headers: this.getHeaders(),
 			params: {
-				'range[login]': `[${query},${queryRangeEnd}]`,
+				'range[login]': `${query},${queryRangeEnd}`,
 				sort: 'login',
 				page,
 				per_page: perPage,
