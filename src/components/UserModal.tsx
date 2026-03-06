@@ -79,11 +79,11 @@ export const UserModal = ({ user, onClose }: UserModalProps) => {
 						marginBottom: '25px',
 					}}>
 					<img
-						src={user.image.versions.medium}
+						src={user.image.versions.large}
 						alt={user.login}
 						style={{
-							width: '140px',
-							height: '140px',
+							width: '300px',
+							height: '300px',
 							borderRadius: '50%',
 							objectFit: 'cover',
 							border: '4px solid #00babc',
