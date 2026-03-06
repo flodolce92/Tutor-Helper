@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { authService } from './auth.service';
 import type { UserSearch, LocationUser } from '../types/user';
+import type { Event } from '../types/event';
 
 const API_BASE = '/api/v2';
 
@@ -74,21 +75,23 @@ class ApiService {
 		return response.data;
 	}
 
-	// Get specific user by ID
-	async getUserById(userId: number): Promise<UserSearch> {
-		const response = await axios.get<UserSearch>(
-			`${API_BASE}/users/${userId}`,
-			{
-				headers: this.getHeaders(),
-			}
-		);
-		return response.data;
-	}
-
-	// Get specific user by login
-	async getUserByLogin(login: string): Promise<UserSearch> {
-		const response = await axios.get<UserSearch>(`${API_BASE}/users/${login}`, {
+	// Get future events by campus and cursus sorted by start date
+	async getEvents(
+		campusId: number,
+		cursusId: number,
+		page: number = 1,
+		perPage: number = 20
+	): Promise<Event[]> {
+		const response = await axios.get<Event[]>(`${API_BASE}/events`, {
 			headers: this.getHeaders(),
+			params: {
+				'campus_id': campusId,
+				'cursus_id': cursusId,
+				'filter[future]': true,
+				sort: 'begin_at',
+				page,
+				per_page: perPage,
+			},
 		});
 		return response.data;
 	}

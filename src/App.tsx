@@ -5,6 +5,7 @@ import { Callback } from './pages/Callback';
 import { SearchPage } from './pages/SearchPage';
 import { FilterPage } from './pages/FilterPage';
 import { OnlinePage } from './pages/OnlinePage';
+import { EventsPage } from './pages/EventsPage';
 
 function App() {
 	return (
@@ -51,10 +52,13 @@ function App() {
 						🔍 Search
 					</Link>
 					<Link to="/filter" className="nav-link">
-						🏊 Filter by Piscine
+						🏊 Piscine
 					</Link>
 					<Link to="/online" className="nav-link">
-						🟢 Online Students
+						🟢 Online
+					</Link>
+					<Link to="/events" className="nav-link">
+						📅 Events
 					</Link>
 				</nav>
 				<Routes>
@@ -63,6 +67,7 @@ function App() {
 					<Route path="/search" element={<SearchPage />} />
 					<Route path="/filter" element={<FilterPage />} />
 					<Route path="/online" element={<OnlinePage />} />
+					<Route path="/events" element={<EventsPage />} />
 				</Routes>
 			</BrowserRouter>
 		</AuthProvider>
