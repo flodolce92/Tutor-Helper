@@ -1,13 +1,9 @@
 export default async function handler(req, res) {
-	// Extract path from URL directly, ignoring Vercel's query injection
 	const urlWithoutPrefix = req.url.replace(/^\/api\/v2/, '');
 	const [rawPath, rawQuery] = urlWithoutPrefix.split('?');
 	const cleanPath = rawPath.replace(/^\//, '');
 
-	// Parse original query string, excluding Vercel's injected ...path param
 	const queryParams = new URLSearchParams(rawQuery ?? '');
-	queryParams.delete('...path');
-	queryParams.delete('path');
 
 	const qs = queryParams.toString();
 	const targetUrl = `https://api.intra.42.fr/v2/${cleanPath}${qs ? `?${qs}` : ''}`;
@@ -17,7 +13,6 @@ export default async function handler(req, res) {
 	if (authHeader) headers['Authorization'] = authHeader;
 
 	console.log(`Proxying: ${req.method} ${targetUrl}`);
-	console.log('Auth header present:', !!authHeader);
 
 	try {
 		const response = await fetch(targetUrl, {
