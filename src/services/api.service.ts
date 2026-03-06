@@ -21,7 +21,7 @@ class ApiService {
 		query = query.trim();
 		query = query.toLowerCase();
 		const queryRangeEnd = query.slice(0, -1) + String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
-		const response = await axios.get<UserSearch[]>(`${API_BASE}/users`, {
+		const response = await axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
 			headers: this.getHeaders(),
 			params: {
 				'range[login]': `${query},${queryRangeEnd}`,
