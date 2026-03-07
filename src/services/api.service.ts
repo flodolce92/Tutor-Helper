@@ -13,7 +13,7 @@ class ApiService {
 		};
 	}
 
-	// Search users by login
+	// Search users
 	async searchUsers(
 		query: string,
 		page: number = 1,
@@ -24,9 +24,10 @@ class ApiService {
 		const queryRangeEnd =
 			query.slice(0, -1) +
 			String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
-		const response = await axios.get<UserSearch[]>(
-			`${API_BASE}/campus/30/users`,
-			{
+
+		const [loginResults, nameResults] = await Promise.all([
+			// Search by login
+			axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
 				headers: this.getHeaders(),
 				params: {
 					'range[login]': `${query},${queryRangeEnd}`,
@@ -34,9 +35,26 @@ class ApiService {
 					page,
 					per_page: perPage,
 				},
-			},
+			}),
+			// Search by first_name
+			axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
+				headers: this.getHeaders(),
+				params: {
+					'filter[first_name]': `${query}`,
+					sort: 'first_name',
+					page,
+					per_page: perPage,
+				},
+			}),
+		]);
+
+		// Combine results and remove duplicates based on user id
+		const allUsers = [...loginResults.data, ...nameResults.data];
+		const uniqueUsers = Array.from(
+			new Map(allUsers.map((user) => [user.id, user])).values(),
 		);
-		return response.data;
+
+		return uniqueUsers;
 	}
 
 	// Get users filtered by pool
