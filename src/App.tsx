@@ -6,69 +6,39 @@ import { SearchPage } from './pages/SearchPage';
 import { FilterPage } from './pages/FilterPage';
 import { OnlinePage } from './pages/OnlinePage';
 import { EventsPage } from './pages/EventsPage';
+import './App.css';
 
 function App() {
 	return (
 		<AuthProvider>
 			<BrowserRouter>
-				<style>
-					{`
-						.nav-link {
-							color: #cccccc;
-							text-decoration: none;
-							padding: 10px 20px;
-							border-radius: 8px;
-							transition: all 0.2s;
-							font-weight: 500;
-							font-size: 15px;
-						}
-						.nav-link:hover {
-							color: #00babc;
-							background-color: rgba(0, 186, 188, 0.1);
-							transform: translateY(-2px);
-						}
-						.nav-link.active {
-							color: #00babc;
-							background-color: rgba(0, 186, 188, 0.15);
-						}
-					`}
-				</style>
-				<nav
-					style={{
-						padding: '16px 20px',
-						backgroundColor: '#1e1e1e',
-						borderBottom: '2px solid #333333',
-						display: 'flex',
-						gap: '8px',
-						justifyContent: 'center',
-						alignItems: 'center',
-						flexWrap: 'wrap',
-						boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-					}}>
+				<nav>
 					<Link to="/" className="nav-link">
-						🏠 Home
+						🏠<span className="nav-text"> Home</span>
 					</Link>
 					<Link to="/search" className="nav-link">
-						🔍 Search
+						🔍<span className="nav-text"> Search</span>
 					</Link>
 					<Link to="/filter" className="nav-link">
-						🏊 Piscine
+						🏊<span className="nav-text"> Piscine</span>
 					</Link>
 					<Link to="/online" className="nav-link">
-						🟢 Online
+						🟢<span className="nav-text"> Online</span>
 					</Link>
 					<Link to="/events" className="nav-link">
-						📅 Events
+						📅<span className="nav-text"> Events</span>
 					</Link>
 				</nav>
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/callback" element={<Callback />} />
-					<Route path="/search" element={<SearchPage />} />
-					<Route path="/filter" element={<FilterPage />} />
-					<Route path="/online" element={<OnlinePage />} />
-					<Route path="/events" element={<EventsPage />} />
-				</Routes>
+				<div className="content-wrapper">
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/callback" element={<Callback />} />
+						<Route path="/search" element={<SearchPage />} />
+						<Route path="/filter" element={<FilterPage />} />
+						<Route path="/online" element={<OnlinePage />} />
+						<Route path="/events" element={<EventsPage />} />
+					</Routes>
+				</div>
 			</BrowserRouter>
 		</AuthProvider>
 	);
