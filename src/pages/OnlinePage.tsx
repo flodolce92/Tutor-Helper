@@ -3,6 +3,7 @@ import { apiService } from '../services/api.service';
 import type { LocationUser, UserSearch } from '../types/user';
 import { OnlineUserCard } from '../components/OnlineUserCard';
 import { UserModal } from '../components/UserModal';
+import John from '/john.gif';
 
 export const OnlinePage = () => {
 	const [locations, setLocations] = useState<LocationUser[]>([]);
@@ -34,6 +35,20 @@ export const OnlinePage = () => {
 		return (
 			<div style={{ textAlign: 'center', marginTop: '100px' }}>
 				<h2 style={{ color: '#ffffff' }}>Loading...</h2>
+			</div>
+		);
+	}
+
+	if (locations.length === 0) {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					minHeight: '70vh',
+				}}>
+				<img src={John} alt="No students online" />
 			</div>
 		);
 	}
