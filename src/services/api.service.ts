@@ -54,6 +54,25 @@ class ApiService {
 		return response.data;
 	}
 
+	// Get all users filtered by pool
+	async getAllUsersByPool(
+		poolMonth: string,
+		poolYear: string
+	): Promise<UserSearch[]> {
+		let allUsers: UserSearch[] = [];
+		let page = 1;
+		let hasMore = true;
+
+		while (hasMore) {
+			const users = await this.getUsersByPool(poolMonth, poolYear, page, 100);
+			allUsers = [...allUsers, ...users];
+			hasMore = users.length === 100;
+			page++;
+		}
+
+		return allUsers;
+	}
+
 	// Get users currently logged in at a campus
 	async getLocations(
 		campusId: number,

@@ -57,7 +57,7 @@ export const FilterPage = () => {
 		setLoading(true);
 		setSearched(true);
 		try {
-			const users = await apiService.getUsersByPool(month, year);
+			const users = await apiService.getAllUsersByPool(month, year);
 			setResults(users);
 		} catch (error) {
 			console.error('Filter failed:', error);
