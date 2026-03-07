@@ -32,7 +32,11 @@ export const OnlineUserCard = ({ location, onClick }: OnlineUserCardProps) => {
 			onClick={onClick}>
 			{location.user.image && (
 				<img
-					src={location.user.image.versions.medium ? location.user.image.versions.medium : Bob}
+					src={
+						location.user.image.versions.medium
+							? location.user.image.versions.medium
+							: Bob
+					}
 					alt={location.user.login}
 					style={{
 						width: '160px',

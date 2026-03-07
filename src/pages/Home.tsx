@@ -174,7 +174,9 @@ export const Home = () => {
 					}}>
 					{user?.image?.versions?.medium && (
 						<img
-							src={user.image.versions.medium ? user.image.versions.medium : Bob}
+							src={
+								user.image.versions.medium ? user.image.versions.medium : Bob
+							}
 							alt={user?.login}
 							style={{
 								width: '150px',
