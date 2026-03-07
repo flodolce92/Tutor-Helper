@@ -17,7 +17,7 @@ export const OnlinePage = () => {
 	useEffect(() => {
 		const fetchLocations = async () => {
 			try {
-				const locs = await apiService.getLocations(30);
+				const locs = await apiService.getLocations();
 				locs.sort((a, b) =>
 					a.host.localeCompare(b.host, undefined, { numeric: true }),
 				);

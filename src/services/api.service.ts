@@ -6,11 +6,39 @@ import type { Event } from '../types/event';
 const API_BASE = '/api/v2';
 
 class ApiService {
+	private campusId: number | null = null;
+
 	private getHeaders() {
 		const token = authService.getStoredToken();
 		return {
 			Authorization: `Bearer ${token}`,
 		};
+	}
+
+	// Get the primary campus ID from the authenticated user
+	async getCampusId(): Promise<number> {
+		if (this.campusId !== null) {
+			return this.campusId;
+		}
+
+		try {
+			const user = await authService.getCurrentUser();
+			if (user.campus && user.campus.length > 0) {
+				this.campusId = user.campus[0].id;
+				return this.campusId;
+			}
+			console.warn('No campus found for user, using default campus 30');
+			this.campusId = 30;
+			return this.campusId;
+		} catch (error) {
+			console.error('Failed to get campus ID:', error);
+			this.campusId = 30;
+			return this.campusId;
+		}
+	}
+
+	resetCampusId() {
+		this.campusId = null;
 	}
 
 	// Search users
@@ -19,6 +47,7 @@ class ApiService {
 		page: number = 1,
 		perPage: number = 20,
 	): Promise<UserSearch[]> {
+		const campusId = await this.getCampusId();
 		query = query.trim();
 		query = query.toLowerCase();
 		const queryRangeEnd =
@@ -27,7 +56,7 @@ class ApiService {
 
 		const [loginResults, nameResults] = await Promise.all([
 			// Search by login
-			axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
+			axios.get<UserSearch[]>(`${API_BASE}/campus/${campusId}/users`, {
 				headers: this.getHeaders(),
 				params: {
 					'range[login]': `${query},${queryRangeEnd}`,
@@ -37,7 +66,7 @@ class ApiService {
 				},
 			}),
 			// Search by first_name
-			axios.get<UserSearch[]>(`${API_BASE}/campus/30/users`, {
+			axios.get<UserSearch[]>(`${API_BASE}/campus/${campusId}/users`, {
 				headers: this.getHeaders(),
 				params: {
 					'filter[first_name]': `${query}`,
@@ -64,8 +93,9 @@ class ApiService {
 		page: number = 1,
 		perPage: number = 100,
 	): Promise<UserSearch[]> {
+		const campusId = await this.getCampusId();
 		const response = await axios.get<UserSearch[]>(
-			`${API_BASE}/campus/30/users`,
+			`${API_BASE}/campus/${campusId}/users`,
 			{
 				headers: this.getHeaders(),
 				params: {
@@ -100,10 +130,8 @@ class ApiService {
 	}
 
 	// Get users currently logged in at a campus
-	async getLocations(
-		campusId: number,
-		page: number = 1,
-	): Promise<LocationUser[]> {
+	async getLocations(page: number = 1): Promise<LocationUser[]> {
+		const campusId = await this.getCampusId();
 		const response = await axios.get<LocationUser[]>(
 			`${API_BASE}/campus/${campusId}/locations`,
 			{
@@ -121,11 +149,8 @@ class ApiService {
 	}
 
 	// Get future events by campus and cursus sorted by start date
-	async getEvents(
-		campusId: number,
-		page: number = 1,
-		perPage: number = 20,
-	): Promise<Event[]> {
+	async getEvents(page: number = 1, perPage: number = 20): Promise<Event[]> {
+		const campusId = await this.getCampusId();
 		const response = await axios.get<Event[]>(
 			`${API_BASE}/campus/${campusId}/events`,
 			{

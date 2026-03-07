@@ -10,7 +10,7 @@ export const EventsPage = () => {
 	useEffect(() => {
 		const fetchEvents = async () => {
 			try {
-				const evs = await apiService.getEvents(30);
+				const evs = await apiService.getEvents();
 				const filteredEvents = evs.filter((event) => {
 					return event.cursus_ids.includes(9);
 				});

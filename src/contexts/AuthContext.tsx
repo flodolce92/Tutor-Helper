@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import type { User42 } from '../types/auth';
 import { authService } from '../services/auth.service';
+import { apiService } from '../services/api.service';
 
 interface AuthContextType {
 	user: User42 | null;
@@ -49,6 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 	const logout = () => {
 		authService.logout();
+		apiService.resetCampusId();
 		setUser(null);
 	};
 

@@ -1,3 +1,16 @@
+export interface Campus {
+	id: number;
+	name: string;
+	time_zone: string;
+	language: {
+		id: number;
+		name: string;
+		identifier: string;
+	};
+	users_count: number;
+	vogsphere_id: number;
+}
+
 export interface User42 {
 	id: number;
 	email: string;
@@ -27,6 +40,7 @@ export interface User42 {
 	anonymize_date: string;
 	created_at: string;
 	updated_at: string;
+	campus: Campus[];
 }
 
 export interface TokenResponse {
