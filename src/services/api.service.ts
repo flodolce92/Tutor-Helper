@@ -78,15 +78,12 @@ class ApiService {
 	// Get future events by campus and cursus sorted by start date
 	async getEvents(
 		campusId: number,
-		cursusId: number,
 		page: number = 1,
 		perPage: number = 20
 	): Promise<Event[]> {
-		const response = await axios.get<Event[]>(`${API_BASE}/events`, {
+		const response = await axios.get<Event[]>(`${API_BASE}/campus/${campusId}/events`, {
 			headers: this.getHeaders(),
 			params: {
-				'campus_id': campusId,
-				'cursus_id': cursusId,
 				'filter[future]': true,
 				sort: 'begin_at',
 				page,

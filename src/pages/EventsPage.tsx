@@ -10,8 +10,11 @@ export const EventsPage = () => {
 	useEffect(() => {
 		const fetchEvents = async () => {
 			try {
-				const evs = await apiService.getEvents(30, 9);
-				setEvents(evs);
+				const evs = await apiService.getEvents(30);
+				const filteredEvents = evs.filter((event) => {
+					return event.cursus_ids.includes(9);
+				});
+				setEvents(filteredEvents);
 			} catch (error) {
 				console.error('Failed to fetch events:', error);
 				alert('Failed to load events.');

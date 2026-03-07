@@ -8,4 +8,5 @@ export interface Event {
 	nbr_subscribers: number;
 	max_people?: number;
 	kind: string;
+	cursus_ids: number[];
 }
