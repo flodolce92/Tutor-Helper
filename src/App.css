@@ -54,10 +54,6 @@ nav {
 }
 
 @media (max-width: 768px) {
-	body {
-		padding-bottom: 70px;
-	}
-
 	nav {
 		position: fixed;
 		top: auto;

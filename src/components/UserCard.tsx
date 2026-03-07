@@ -51,7 +51,7 @@ export const UserCard = ({ user, onClick }: UserCardProps) => {
 					{user.usual_full_name}
 				</h3>
 				<p style={{ margin: '0 0 8px 0', color: '#999', fontSize: '14px' }}>
-					@{user.login}
+					{user.login}
 				</p>
 				<p
 					style={{
@@ -87,7 +87,7 @@ export const UserCard = ({ user, onClick }: UserCardProps) => {
 					⭐ {user.correction_point}
 				</p>
 				<p style={{ margin: '0', fontSize: '12px', color: '#cccccc' }}>
-					💰 {user.wallet}€
+					💰 {user.wallet}
 				</p>
 			</div>
 		</div>

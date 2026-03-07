@@ -55,7 +55,7 @@ export const OnlineUserCard = ({ location, onClick }: OnlineUserCardProps) => {
 					textAlign: 'center',
 					width: '100%',
 				}}>
-				@{location.user.login}
+				{location.user.login}
 			</h3>
 			<div
 				style={{

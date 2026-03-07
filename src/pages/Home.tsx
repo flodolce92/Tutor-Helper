@@ -199,7 +199,7 @@ export const Home = () => {
 						</h2>
 						<p
 							style={{ margin: '0 0 20px 0', color: '#999', fontSize: '16px' }}>
-							@{user?.login}
+							{user?.login}
 						</p>
 
 						<div
