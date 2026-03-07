@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { UserSearch } from '../types/user';
+import Bob from '/bob.webp';
 
 interface UserModalProps {
 	user: UserSearch | null;
@@ -95,7 +96,7 @@ export const UserModal = ({ user, onClose }: UserModalProps) => {
 						marginBottom: '25px',
 					}}>
 					<img
-						src={user.image.versions.large}
+						src={user.image.versions.large ? user.image.versions.large : Bob}
 						alt={user.login}
 						style={{
 							width: '300px',

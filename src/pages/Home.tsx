@@ -1,4 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
+import Bob from '/bob.webp';
 
 export const Home = () => {
 	const { user, login, logout, isAuthenticated, loading } = useAuth();
@@ -173,7 +174,7 @@ export const Home = () => {
 					}}>
 					{user?.image?.versions?.medium && (
 						<img
-							src={user.image.versions.medium}
+							src={user.image.versions.medium ? user.image.versions.medium : Bob}
 							alt={user?.login}
 							style={{
 								width: '150px',

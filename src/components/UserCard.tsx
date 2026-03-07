@@ -1,4 +1,5 @@
 import type { UserSearch } from '../types/user';
+import Bob from '/bob.webp';
 
 interface UserCardProps {
 	user: UserSearch;
@@ -30,7 +31,7 @@ export const UserCard = ({ user, onClick }: UserCardProps) => {
 			}}
 			onClick={onClick}>
 			<img
-				src={user.image.versions.medium}
+				src={user.image.versions.medium ? user.image.versions.medium : Bob}
 				alt={user.login}
 				style={{
 					width: '140px',
