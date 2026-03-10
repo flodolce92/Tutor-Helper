@@ -39,6 +39,19 @@ export default async function handler(req, res) {
 			});
 		}
 
+		// Add caching for pool user queries (24 hours)
+		if (
+			response.status === 200 &&
+			cleanPath.includes('/users') &&
+			queryParams.has('filter[pool_month]') &&
+			queryParams.has('filter[pool_year]')
+		) {
+			res.setHeader(
+				'Cache-Control',
+				'public, s-maxage=86400, stale-while-revalidate=43200',
+			);
+		}
+
 		return res.status(response.status).json(data);
 	} catch (error) {
 		console.error('API proxy error:', error);
