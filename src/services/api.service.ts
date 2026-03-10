@@ -138,7 +138,7 @@ class ApiService {
 				params: {
 					'filter[pool_month]': poolMonth,
 					'filter[pool_year]': poolYear,
-					sort: 'login',
+					sort: 'first_name,last_name',
 					page,
 					per_page: perPage,
 				},
