@@ -24,6 +24,7 @@ export const FilterPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [searched, setSearched] = useState(false);
 	const [selectedUser, setSelectedUser] = useState<UserSearchType | null>(null);
+	const [liveFilter, setLiveFilter] = useState('');
 
 	useEffect(() => {
 		const savedMonth = getCookie('filterMonth');
@@ -56,6 +57,7 @@ export const FilterPage = () => {
 
 		setLoading(true);
 		setSearched(true);
+		setLiveFilter('');
 		try {
 			const users = await apiService.getAllUsersByPool(month, year);
 			setResults(users);
@@ -66,6 +68,23 @@ export const FilterPage = () => {
 			setLoading(false);
 		}
 	};
+
+	const handleReset = () => {
+		setSearched(false);
+		setResults([]);
+		setLiveFilter('');
+	};
+
+	const filteredResults = results.filter((user) => {
+		if (!liveFilter) return true;
+		const searchTerm = liveFilter.toLowerCase();
+		return (
+			user.login.toLowerCase().includes(searchTerm) ||
+			user.first_name.toLowerCase().includes(searchTerm) ||
+			user.last_name.toLowerCase().includes(searchTerm) ||
+			user.usual_full_name.toLowerCase().includes(searchTerm)
+		);
+	});
 
 	return (
 		<div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -83,105 +102,169 @@ export const FilterPage = () => {
 					}
 				`}
 			</style>
-			<form
-				onSubmit={handleFilter}
-				style={{
-					marginBottom: '30px',
-					display: 'flex',
-					flexWrap: 'wrap',
-					gap: '12px',
-					alignItems: 'stretch',
-					backgroundColor: '#1e1e1e',
-					padding: '20px',
-					borderRadius: '12px',
-					border: '1px solid #333333',
-				}}>
-				<select
-					value={month}
-					onChange={(e) => setMonth(e.target.value)}
+
+			{!searched || results.length === 0 ? (
+				<form
+					onSubmit={handleFilter}
 					style={{
-						padding: '14px 18px',
-						fontSize: '16px',
-						minWidth: '180px',
-						borderRadius: '8px',
-						border: '2px solid #333333',
-						backgroundColor: '#2a2a2a',
-						color: '#ffffff',
-						outline: 'none',
-						transition: 'border-color 0.2s',
-						cursor: 'pointer',
-					}}
-					onFocus={(e) => (e.target.style.borderColor = '#00babc')}
-					onBlur={(e) => (e.target.style.borderColor = '#333333')}>
-					<option value="">📅 Select Month</option>
-					{months.map((m) => (
-						<option key={m} value={m}>
-							{m.charAt(0).toUpperCase() + m.slice(1)}
-						</option>
-					))}
-				</select>
-				<input
-					type="text"
-					value={year}
-					onChange={(e) => setYear(e.target.value)}
-					placeholder="📆 Year"
-					style={{
-						padding: '14px 18px',
-						fontSize: '16px',
-						width: '120px',
-						minWidth: '70px',
-						borderRadius: '8px',
-						border: '2px solid #333333',
-						backgroundColor: '#2a2a2a',
-						color: '#ffffff',
-						outline: 'none',
-						transition: 'border-color 0.2s',
-					}}
-					onFocus={(e) => (e.target.style.borderColor = '#00babc')}
-					onBlur={(e) => (e.target.style.borderColor = '#333333')}
-				/>
-				<button
-					type="submit"
-					disabled={loading || !month || !year}
-					style={{
-						padding: '14px 32px',
-						fontSize: '16px',
-						fontWeight: '600',
-						backgroundColor: loading || !month || !year ? '#666666' : '#00babc',
-						color: 'white',
-						border: 'none',
-						borderRadius: '8px',
-						cursor: loading || !month || !year ? 'not-allowed' : 'pointer',
-						transition: 'all 0.2s',
-						whiteSpace: 'nowrap',
-					}}
-					onMouseEnter={(e) => {
-						if (!loading && month && year) {
-							e.currentTarget.style.backgroundColor = '#00d4d6';
-							e.currentTarget.style.transform = 'translateY(-2px)';
-							e.currentTarget.style.boxShadow =
-								'0 4px 12px rgba(0, 186, 188, 0.3)';
-						}
-					}}
-					onMouseLeave={(e) => {
-						if (!loading && month && year) {
-							e.currentTarget.style.backgroundColor = '#00babc';
-							e.currentTarget.style.transform = 'translateY(0)';
-							e.currentTarget.style.boxShadow = 'none';
-						}
+						marginBottom: '30px',
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '12px',
+						alignItems: 'stretch',
+						backgroundColor: '#1e1e1e',
+						padding: '20px',
+						borderRadius: '12px',
+						border: '1px solid #333333',
 					}}>
-					{loading ? '🔍 Filtering...' : '🔍 Filter'}
-				</button>
-			</form>
+					<select
+						value={month}
+						onChange={(e) => setMonth(e.target.value)}
+						style={{
+							padding: '14px 18px',
+							fontSize: '16px',
+							minWidth: '180px',
+							borderRadius: '8px',
+							border: '2px solid #333333',
+							backgroundColor: '#2a2a2a',
+							color: '#ffffff',
+							outline: 'none',
+							transition: 'border-color 0.2s',
+							cursor: 'pointer',
+						}}
+						onFocus={(e) => (e.target.style.borderColor = '#00babc')}
+						onBlur={(e) => (e.target.style.borderColor = '#333333')}>
+						<option value="">📅 Select Month</option>
+						{months.map((m) => (
+							<option key={m} value={m}>
+								{m.charAt(0).toUpperCase() + m.slice(1)}
+							</option>
+						))}
+					</select>
+					<input
+						type="text"
+						value={year}
+						onChange={(e) => setYear(e.target.value)}
+						placeholder="📆 Year"
+						style={{
+							padding: '14px 18px',
+							fontSize: '16px',
+							width: '120px',
+							minWidth: '70px',
+							borderRadius: '8px',
+							border: '2px solid #333333',
+							backgroundColor: '#2a2a2a',
+							color: '#ffffff',
+							outline: 'none',
+							transition: 'border-color 0.2s',
+						}}
+						onFocus={(e) => (e.target.style.borderColor = '#00babc')}
+						onBlur={(e) => (e.target.style.borderColor = '#333333')}
+					/>
+					<button
+						type="submit"
+						disabled={loading || !month || !year}
+						style={{
+							padding: '14px 32px',
+							fontSize: '16px',
+							fontWeight: '600',
+							backgroundColor:
+								loading || !month || !year ? '#666666' : '#00babc',
+							color: 'white',
+							border: 'none',
+							borderRadius: '8px',
+							cursor: loading || !month || !year ? 'not-allowed' : 'pointer',
+							transition: 'all 0.2s',
+							whiteSpace: 'nowrap',
+						}}
+						onMouseEnter={(e) => {
+							if (!loading && month && year) {
+								e.currentTarget.style.backgroundColor = '#00d4d6';
+								e.currentTarget.style.transform = 'translateY(-2px)';
+								e.currentTarget.style.boxShadow =
+									'0 4px 12px rgba(0, 186, 188, 0.3)';
+							}
+						}}
+						onMouseLeave={(e) => {
+							if (!loading && month && year) {
+								e.currentTarget.style.backgroundColor = '#00babc';
+								e.currentTarget.style.transform = 'translateY(0)';
+								e.currentTarget.style.boxShadow = 'none';
+							}
+						}}>
+						{loading ? '🔍 Filtering...' : '🔍 Filter'}
+					</button>
+				</form>
+			) : (
+				<div
+					style={{
+						marginBottom: '30px',
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '12px',
+						alignItems: 'center',
+						backgroundColor: '#1e1e1e',
+						padding: '20px',
+						borderRadius: '12px',
+						border: '1px solid #333333',
+					}}>
+					<input
+						type="text"
+						value={liveFilter}
+						onChange={(e) => setLiveFilter(e.target.value)}
+						placeholder="🔍 Quick filter"
+						style={{
+							flex: '1',
+							padding: '14px 18px',
+							fontSize: '16px',
+							minWidth: '200px',
+							borderRadius: '8px',
+							border: '2px solid #333333',
+							backgroundColor: '#2a2a2a',
+							color: '#ffffff',
+							outline: 'none',
+							transition: 'border-color 0.2s',
+						}}
+						onFocus={(e) => (e.target.style.borderColor = '#00babc')}
+						onBlur={(e) => (e.target.style.borderColor = '#333333')}
+					/>
+					<button
+						onClick={handleReset}
+						style={{
+							padding: '14px 24px',
+							fontSize: '16px',
+							fontWeight: '600',
+							backgroundColor: '#444444',
+							color: 'white',
+							border: 'none',
+							borderRadius: '8px',
+							cursor: 'pointer',
+							transition: 'all 0.2s',
+							whiteSpace: 'nowrap',
+						}}
+						onMouseEnter={(e) => {
+							e.currentTarget.style.backgroundColor = '#555555';
+							e.currentTarget.style.transform = 'translateY(-2px)';
+						}}
+						onMouseLeave={(e) => {
+							e.currentTarget.style.backgroundColor = '#444444';
+							e.currentTarget.style.transform = 'translateY(0)';
+						}}>
+						🔄 New Search
+					</button>
+				</div>
+			)}
 
 			{searched && !loading && (
 				<p style={{ marginBottom: '15px', color: '#cccccc' }}>
-					Found {results.length} student{results.length !== 1 ? 's' : ''}
+					Found {filteredResults.length} student
+					{filteredResults.length !== 1 ? 's' : ''}{' '}
+					{liveFilter && `(filtered from ${results.length} total)`}
 				</p>
 			)}
 
 			<div className="user-grid">
-				{results.map((user) => (
+				{filteredResults.map((user) => (
 					<UserCard
 						key={user.id}
 						user={user}
