@@ -17,8 +17,18 @@ export const UserSearch = () => {
 
 		setLoading(true);
 		setSearched(true);
+		setResults([]);
 		try {
-			const users = await apiService.searchUsers(query);
+			const users = await apiService.searchUsers(
+				query,
+				1,
+				20,
+				(partialUsers) => {
+					// Update results as they come in
+					setResults(partialUsers);
+				},
+			);
+			// Set final results with all three searches
 			setResults(users);
 		} catch (error) {
 			console.error('Search failed:', error);

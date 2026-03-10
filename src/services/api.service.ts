@@ -50,6 +50,7 @@ class ApiService {
 		query: string,
 		page: number = 1,
 		perPage: number = 20,
+		onPartialResults?: (users: UserSearch[]) => void,
 	): Promise<UserSearch[]> {
 		const campusId = await this.getCampusId();
 		query = query.trim();
@@ -58,17 +59,7 @@ class ApiService {
 			query.slice(0, -1) +
 			String.fromCharCode(query.charCodeAt(query.length - 1) + 1);
 
-		const [loginResults, nameResults] = await Promise.all([
-			// Search by login
-			axios.get<UserSearch[]>(`${API_BASE}/campus/${campusId}/users`, {
-				headers: this.getHeaders(),
-				params: {
-					'range[login]': `${query},${queryRangeEnd}`,
-					sort: 'login',
-					page,
-					per_page: perPage,
-				},
-			}),
+		const [firstNameResults, lastNameResults] = await Promise.all([
 			// Search by first_name
 			axios.get<UserSearch[]>(`${API_BASE}/campus/${campusId}/users`, {
 				headers: this.getHeaders(),
@@ -79,15 +70,57 @@ class ApiService {
 					per_page: perPage,
 				},
 			}),
+			// Search by last_name
+			axios.get<UserSearch[]>(`${API_BASE}/campus/${campusId}/users`, {
+				headers: this.getHeaders(),
+				params: {
+					'filter[last_name]': `${query}`,
+					sort: 'last_name',
+					page,
+					per_page: perPage,
+				},
+			}),
 		]);
 
-		// Combine results and remove duplicates based on user id
-		const allUsers = [...loginResults.data, ...nameResults.data];
-		const uniqueUsers = Array.from(
+		// Emit first batch of results (first_name + last_name)
+		let currentUsers = [...firstNameResults.data, ...lastNameResults.data];
+		let uniqueUsers = Array.from(
+			new Map(currentUsers.map((user) => [user.id, user])).values(),
+		);
+		if (onPartialResults) {
+			onPartialResults(
+				uniqueUsers.sort((a, b) => a.first_name.localeCompare(b.first_name)),
+			);
+		}
+
+		// await for rate limit
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+
+		const loginResults = await axios.get<UserSearch[]>(
+			`${API_BASE}/campus/${campusId}/users`,
+			{
+				headers: this.getHeaders(),
+				params: {
+					'range[login]': `${query},${queryRangeEnd}`,
+					sort: 'login',
+					page,
+					per_page: perPage,
+				},
+			},
+		);
+
+		// Combine all results and remove duplicates
+		const allUsers = [
+			...firstNameResults.data,
+			...lastNameResults.data,
+			...loginResults.data,
+		];
+		uniqueUsers = Array.from(
 			new Map(allUsers.map((user) => [user.id, user])).values(),
 		);
 
-		return uniqueUsers;
+		// Sort by usual_full_name
+		return uniqueUsers.sort((a, b) => a.usual_full_name.localeCompare(b.usual_full_name));
 	}
 
 	// Get users filtered by pool
