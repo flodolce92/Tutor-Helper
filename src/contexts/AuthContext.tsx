@@ -32,6 +32,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 				try {
 					const userData = await authService.getCurrentUser();
 					setUser(userData);
+					if (userData.campus && userData.campus.length > 0) {
+						apiService.setCampusId(userData.campus[0].id);
+					}
 				} catch (error) {
 					console.error('Failed to get user:', error);
 					authService.logout();

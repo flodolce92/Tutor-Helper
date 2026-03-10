@@ -41,6 +41,10 @@ class ApiService {
 		this.campusId = null;
 	}
 
+	setCampusId(campusId: number) {
+		this.campusId = campusId;
+	}
+
 	// Search users
 	async searchUsers(
 		query: string,
