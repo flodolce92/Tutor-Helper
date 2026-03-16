@@ -37,11 +37,76 @@
 </script>
 
 <style>
+	.wrapper {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px;
+	}
+
+	.search-form {
+		margin-bottom: 30px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		align-items: stretch;
+		background-color: #1e1e1e;
+		padding: 20px;
+		border-radius: 12px;
+		border: 1px solid #333333;
+	}
+
+	.search-input {
+		padding: 14px 18px;
+		font-size: 16px;
+		flex: 1;
+		min-width: 250px;
+		border-radius: 8px;
+		border: 2px solid #333333;
+		background-color: #2a2a2a;
+		color: #ffffff;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+
+	.search-input:focus {
+		border-color: #00babc;
+	}
+
+	.search-btn {
+		padding: 14px 32px;
+		font-size: 16px;
+		font-weight: 600;
+		background-color: #00babc;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.2s;
+		white-space: nowrap;
+	}
+
+	.search-btn:hover:not(:disabled) {
+		background-color: #00d4d6;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 186, 188, 0.3);
+	}
+
+	.search-btn:disabled {
+		background-color: #666666;
+		cursor: not-allowed;
+	}
+
+	.results-count {
+		margin-bottom: 15px;
+		color: #cccccc;
+	}
+
 	.user-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 		gap: 20px;
 	}
+
 	@media (max-width: 768px) {
 		.user-grid {
 			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -49,61 +114,21 @@
 	}
 </style>
 
-<div style={{ marginTop: '30px' }}>
-	<form
-		onsubmit={handleSearch}
-		style={{
-			marginBottom: '30px',
-			display: 'flex',
-			flexWrap: 'wrap',
-			gap: '12px',
-			alignItems: 'stretch',
-			backgroundColor: '#1e1e1e',
-			padding: '20px',
-			borderRadius: '12px',
-			border: '1px solid #333333',
-		}}>
+<div class="wrapper">
+	<form class="search-form" onsubmit={handleSearch}>
 		<input
+			class="search-input"
 			type="text"
-			value={query}
-			onchange={(e) => (query = e.target.value)}
+			bind:value={query}
 			placeholder="Search by login or name..."
-			style={{
-				padding: '14px 18px',
-				fontSize: '16px',
-				flex: '1',
-				minWidth: '250px',
-				borderRadius: '8px',
-				border: '2px solid #333333',
-				backgroundColor: '#2a2a2a',
-				color: '#ffffff',
-				outline: 'none',
-				transition: 'border-color 0.2s',
-			}}
-			onfocus={(e) => ((e.target as HTMLInputElement).style.borderColor = '#00babc')}
-			onblur={(e) => ((e.target as HTMLInputElement).style.borderColor = '#333333')}
 		/>
-		<button
-			type="submit"
-			disabled={loading || !query.trim()}
-			style={{
-				padding: '14px 32px',
-				fontSize: '16px',
-				fontWeight: '600',
-				backgroundColor: loading || !query.trim() ? '#666666' : '#00babc',
-				color: 'white',
-				border: 'none',
-				borderRadius: '8px',
-				cursor: loading || !query.trim() ? 'not-allowed' : 'pointer',
-				transition: 'all 0.2s',
-				whiteSpace: 'nowrap',
-			}}>
+		<button class="search-btn" type="submit" disabled={loading || !query.trim()}>
 			{loading ? '🔍 Searching...' : '🔍 Search'}
 		</button>
 	</form>
 
 	{#if searched && !loading}
-		<p style={{ marginBottom: '15px', color: '#cccccc' }}>
+		<p class="results-count">
 			Found {results.length} student{results.length !== 1 ? 's' : ''}
 		</p>
 	{/if}
@@ -113,5 +138,6 @@
 			<UserCard user={user} onclick={() => (selectedUser = user)} />
 		{/each}
 	</div>
+
 	<UserModal user={selectedUser} onClose={() => (selectedUser = null)} />
 </div>

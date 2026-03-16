@@ -7,7 +7,6 @@
 	}
 
 	let { event, onclick } = $props();
-	let isHovered = $state(false);
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
@@ -56,109 +55,117 @@
 	);
 </script>
 
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 20px;
+		background-color: #1e1e1e;
+		border-radius: 12px;
+		border: 2px solid #333333;
+		transition: transform 0.2s, box-shadow 0.2s;
+		min-height: 200px;
+		cursor: default;
+	}
+
+	.card.clickable:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+		cursor: pointer;
+	}
+
+	.card h3 {
+		margin: 0;
+		color: #ffffff;
+		font-size: 18px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.description {
+		margin: 0;
+		font-size: 14px;
+		color: #cccccc;
+		flex: 1;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		line-height: 1.4;
+	}
+
+	.location-row {
+		margin: 0;
+		font-size: 13px;
+		color: #cccccc;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.date-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.date-item {
+		margin: 0;
+		font-size: 11px;
+		color: #999999;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.spots {
+		margin: 0;
+		font-size: 12px;
+		font-weight: 500;
+	}
+
+	.spots.available {
+		color: #28a745;
+	}
+
+	.spots.soldout {
+		color: #e74c3c;
+	}
+</style>
+
 <div
+	class="card {onclick ? 'clickable' : ''}"
 	role="button"
 	tabindex={onclick ? 0 : -1}
-	onmouseenter={() => (isHovered = true)}
-	onmouseleave={() => (isHovered = false)}
-	onclick={onclick}
-	onkeydown={handleKeydown}
-	style={{
-		display: 'flex',
-		flexDirection: 'column',
-		gap: '12px',
-		padding: '20px',
-		backgroundColor: '#1e1e1e',
-		borderRadius: '12px',
-		border: `2px solid ${getKindColor(event.kind)}`,
-		cursor: onclick ? 'pointer' : 'default',
-		transition: 'transform 0.2s, box-shadow 0.2s',
-		minHeight: '200px',
-		transform: isHovered && onclick ? 'translateY(-4px)' : 'translateY(0)',
-		boxShadow: isHovered && onclick ? '0 4px 12px rgba(0, 0, 0, 0.3)' : 'none',
-	}}>
-	<h3
-		style={{
-			margin: '0',
-			color: '#ffffff',
-			fontSize: '18px',
-			overflow: 'hidden',
-			textOverflow: 'ellipsis',
-			whiteSpace: 'nowrap',
-		}}>
-		{event.name}
-	</h3>
+	style="border-color: {getKindColor(event.kind)};"
+	{onclick}
+	onkeydown={handleKeydown}>
+	<h3>{event.name}</h3>
 
-	<p
-		style={{
-			margin: '0',
-			fontSize: '14px',
-			color: '#cccccc',
-			flex: '1',
-			overflow: 'hidden',
-			display: '-webkit-box',
-			WebkitLineClamp: '2',
-			WebkitBoxOrient: 'vertical',
-			lineHeight: '1.4',
-		}}>
-		{event.description ?? 'No description'}
-	</p>
+	<p class="description">{event.description ?? 'No description'}</p>
 
-	<p
-		style={{
-			margin: '0',
-			fontSize: '13px',
-			color: '#cccccc',
-			display: 'flex',
-			alignItems: 'center',
-			gap: '4px',
-		}}>
+	<p class="location-row">
 		<span>📍</span>
 		<span>{event.location ?? 'TBD'}</span>
 	</p>
 
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'space-between',
-				alignItems: 'center',
-				gap: '8px',
-			}}>
-			<p
-				style={{
-					margin: '0',
-					fontSize: '11px',
-					color: '#999999',
-					display: 'flex',
-					alignItems: 'center',
-					gap: '4px',
-				}}>
-				<span>📅</span>
-				<span>{formatDate(event.begin_at)}</span>
-			</p>
-			<p
-				style={{
-					margin: '0',
-					fontSize: '11px',
-					color: '#999999',
-					display: 'flex',
-					alignItems: 'center',
-					gap: '4px',
-				}}>
-				<span>🕐</span>
-				<span>{formatTime(event.begin_at)}</span>
-			</p>
-		</div>
-
-		{#if spotsLeft !== null}
-			<p
-				style={{
-					margin: '0',
-					fontSize: '12px',
-					color: spotsLeft > 0 ? '#28a745' : '#e74c3c',
-					fontWeight: '500',
-				}}>
-				{spotsLeft > 0 ? `${spotsLeft} spots left` : 'Sold out'}
-			</p>
-		{/if}
+	<div class="date-row">
+		<p class="date-item">
+			<span>📅</span>
+			<span>{formatDate(event.begin_at)}</span>
+		</p>
+		<p class="date-item">
+			<span>🕐</span>
+			<span>{formatTime(event.begin_at)}</span>
+		</p>
 	</div>
+
+	{#if spotsLeft !== null}
+		<p class="spots {spotsLeft > 0 ? 'available' : 'soldout'}">
+			{spotsLeft > 0 ? `${spotsLeft} spots left` : 'Sold out'}
+		</p>
+	{/if}
+</div>

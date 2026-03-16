@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import type { UserSearch } from '../types/user';
-	import Bob from '/bob.webp';
+	import Bob from '$lib/assets/bob.webp';
 
 	interface Props {
 		user: UserSearch | null;
@@ -9,7 +9,6 @@
 	}
 
 	let { user, onClose } = $props();
-	let closeButtonHovered = $state(false);
 
 	onMount(() => {
 		if (!user) return;
@@ -39,196 +38,208 @@
 </script>
 
 <style>
+	.backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.85);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+		padding: 20px;
+		backdrop-filter: blur(4px);
+	}
+
+	.modal {
+		background-color: #1e1e1e;
+		padding: 30px;
+		border-radius: 16px;
+		border: 2px solid #333333;
+		max-width: 550px;
+		width: 100%;
+		max-height: 85vh;
+		overflow-y: auto;
+		color: #ffffff;
+		position: relative;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+	}
+
+	.close-btn {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		background: #dc3545;
+		border: none;
+		color: #ffffff;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		padding: 0;
+		font-size: 24px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s;
+	}
+
+	.close-btn:hover {
+		background: #c82333;
+		transform: scale(1.1);
+	}
+
+	.avatar-section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.avatar {
+		width: 300px;
+		height: 300px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 4px solid #00babc;
+		margin-bottom: 15px;
+		box-shadow: 0 4px 12px rgba(0, 186, 188, 0.3);
+	}
+
+	.modal h2 {
+		margin: 0 0 6px 0;
+		color: #ffffff;
+		font-size: 26px;
+		font-weight: 700;
+		text-align: center;
+	}
+
+	.modal > div > p {
+		margin: 0;
+		color: #999;
+		font-size: 16px;
+		text-align: center;
+	}
+
 	.user-modal-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 		gap: 12px;
 	}
+
 	@media (max-width: 768px) {
 		.user-modal-grid {
 			grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
 		}
 	}
+
+	.info-cell {
+		padding: 14px;
+		background-color: #2a2a2a;
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.info-cell.row {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		grid-column: span 2;
+	}
+
+	.info-cell.span-2 {
+		grid-column: span 2;
+	}
+
+	.info-label {
+		color: #999;
+		font-size: 12px;
+	}
+
+	.info-label-md {
+		color: #999;
+		font-size: 14px;
+	}
+
+	.info-value {
+		font-size: 13px;
+		font-weight: 500;
+		color: #ffffff;
+	}
+
+	.info-value-teal {
+		color: #00babc;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.info-value-yellow {
+		color: #ffc107;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.info-value-green {
+		color: #28a745;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.info-value-teal-md {
+		color: #00babc;
+		font-size: 14px;
+		font-weight: 500;
+	}
 </style>
 
 {#if user}
 	<div
+		class="backdrop"
 		onmousedown={handleBackdropClick}
 		onkeydown={handleBackdropKeydown}
-		role="presentation"
-		style={{
-			position: 'fixed',
-			top: 0,
-			left: 0,
-			right: 0,
-			bottom: 0,
-			backgroundColor: 'rgba(0, 0, 0, 0.85)',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			zIndex: '1000',
-			padding: '20px',
-			backdropFilter: 'blur(4px)',
-		}}>
-		<div
-			style={{
-				backgroundColor: '#1e1e1e',
-				padding: '30px',
-				borderRadius: '16px',
-				border: '2px solid #333333',
-				maxWidth: '550px',
-				width: '100%',
-				maxHeight: '85vh',
-				overflowY: 'auto',
-				color: '#ffffff',
-				position: 'relative',
-				boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-			}}
-			role="dialog"
-			aria-modal="true">
-			<button
-				onclick={onClose}
-				onmouseenter={() => (closeButtonHovered = true)}
-				onmouseleave={() => (closeButtonHovered = false)}
-				style={{
-					position: 'absolute',
-					top: '20px',
-					right: '20px',
-					background: closeButtonHovered ? '#c82333' : '#dc3545',
-					border: 'none',
-					color: '#ffffff',
-					width: '36px',
-					height: '36px',
-					borderRadius: '50%',
-					padding: '0',
-					fontSize: '24px',
-					cursor: 'pointer',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					transition: 'all 0.2s',
-				}}>
-				×
-			</button>
+		role="presentation">
+		<div class="modal" role="dialog" aria-modal="true">
+			<button class="close-btn" onclick={onClose}>×</button>
 
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					marginBottom: '15px',
-				}}>
+			<div class="avatar-section">
 				<img
+					class="avatar"
 					src={user.image?.versions?.large || Bob}
 					alt={user.login}
-					style={{
-						width: '300px',
-						height: '300px',
-						borderRadius: '50%',
-						objectFit: 'cover',
-						border: '4px solid #00babc',
-						marginBottom: '15px',
-						boxShadow: '0 4px 12px rgba(0, 186, 188, 0.3)',
-					}}
 				/>
-				<h2
-					style={{
-						margin: '0 0 6px 0',
-						color: '#ffffff',
-						fontSize: '26px',
-						fontWeight: '700',
-						textAlign: 'center',
-					}}>
-					{user.usual_full_name}
-				</h2>
-				<p
-					style={{
-						margin: '0',
-						color: '#999',
-						fontSize: '16px',
-						textAlign: 'center',
-					}}>
-					{user.login}
-				</p>
+				<h2>{user.usual_full_name}</h2>
+				<p>{user.login}</p>
 			</div>
 
 			<div class="user-modal-grid">
-				<div
-					style={{
-						padding: '14px',
-						backgroundColor: '#2a2a2a',
-						borderRadius: '10px',
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						gridColumn: 'span 2',
-					}}>
-					<span style={{ color: '#999', fontSize: '14px' }}>📧 Email</span>
-					<span style={{ color: '#ffffff', fontSize: '13px', fontWeight: '500' }}>
-						{user.email ?? 'N/A'}
-					</span>
+				<div class="info-cell row">
+					<span class="info-label-md">📧 Email</span>
+					<span class="info-value">{user.email ?? 'N/A'}</span>
 				</div>
 
-				<div
-					style={{
-						padding: '14px',
-						backgroundColor: '#2a2a2a',
-						borderRadius: '10px',
-						display: 'flex',
-						flexDirection: 'column',
-						gap: '8px',
-					}}>
-					<span style={{ color: '#999', fontSize: '12px' }}>🏊 Pool</span>
-					<span style={{ color: '#00babc', fontSize: '14px', fontWeight: '600' }}>
-						{user.pool_month} {user.pool_year}
-					</span>
+				<div class="info-cell">
+					<span class="info-label">🏊 Pool</span>
+					<span class="info-value-teal">{user.pool_month} {user.pool_year}</span>
 				</div>
 
-				<div
-					style={{
-						padding: '14px',
-						backgroundColor: '#2a2a2a',
-						borderRadius: '10px',
-						display: 'flex',
-						flexDirection: 'column',
-						gap: '8px',
-					}}>
-					<span style={{ color: '#999', fontSize: '12px' }}>⭐ Points</span>
-					<span style={{ color: '#ffc107', fontSize: '14px', fontWeight: '600' }}>
-						{user.correction_point}
-					</span>
+				<div class="info-cell">
+					<span class="info-label">⭐ Points</span>
+					<span class="info-value-yellow">{user.correction_point}</span>
 				</div>
 
-				<div
-					style={{
-						padding: '14px',
-						backgroundColor: '#2a2a2a',
-						borderRadius: '10px',
-						display: 'flex',
-						flexDirection: 'column',
-						gap: '8px',
-					}}>
-					<span style={{ color: '#999', fontSize: '12px' }}>💰 Wallet</span>
-					<span style={{ color: '#28a745', fontSize: '14px', fontWeight: '600' }}>
-						{user.wallet}
-					</span>
+				<div class="info-cell">
+					<span class="info-label">💰 Wallet</span>
+					<span class="info-value-green">{user.wallet}</span>
 				</div>
 
 				{#if user.location}
-					<div
-						style={{
-							padding: '14px',
-							backgroundColor: '#2a2a2a',
-							borderRadius: '10px',
-							display: 'flex',
-							flexDirection: 'column',
-							gap: '8px',
-							gridColumn: 'span 2',
-						}}>
-						<span style={{ color: '#999', fontSize: '12px' }}>📍 Location</span>
-						<span style={{ color: '#00babc', fontSize: '14px', fontWeight: '500' }}>
-							{user.location}
-						</span>
+					<div class="info-cell span-2">
+						<span class="info-label">📍 Location</span>
+						<span class="info-value-teal-md">{user.location}</span>
 					</div>
 				{/if}
 			</div>
